@@ -2,79 +2,65 @@
 <html lang="hi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111827">
-  <meta name="description" content="MIND MASTER — logic, pattern recognition and deduction puzzle game.">
-  <title>MIND MASTER — दिमागी चुनौती</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10131b">
+  <meta name="description" content="MIND MASTER — Block Blast style block puzzle game.">
+  <title>MIND MASTER — Block Puzzle</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="shell">
+  <main class="app">
     <header class="topbar">
-      <a class="brand" href="./" aria-label="Mind Master home"><span class="brand-mark">M</span><span>MIND <b>MASTER</b></span></a>
-      <span class="offline-tag"><i></i> ऑफलाइन गेम</span>
+      <a class="brand" href="./"><span class="brand-icon">✦</span><span>MIND<span class="brand-accent">MASTER</span></span></a>
+      <span class="live-tag"><i></i> ऑफलाइन मोड</span>
     </header>
 
-    <section class="hero">
-      <p class="eyebrow">दिमाग को चुनौती दो</p>
-      <h1>सोचो। समझो। <span>कोड तोड़ो।</span></h1>
-      <p class="intro">तीन अंकों का गुप्त कोड खोजो। हर संकेत ध्यान से पढ़ो और अपनी तर्कशक्ति का इस्तेमाल करो।</p>
+    <section class="intro">
+      <p class="eyebrow">BLOCK PUZZLE CHALLENGE</p>
+      <h1>जगह बनाओ। <span>ब्लॉक उड़ाओ।</span></h1>
+      <p>ब्लॉक्स को बोर्ड पर फिट करो। पूरी लाइन भरो और हाई स्कोर बनाओ!</p>
     </section>
 
-    <section class="stats" aria-label="खेल की जानकारी">
-      <div><span class="stat-label">लेवल</span><strong>01 <small>/ 10</small></strong></div>
-      <div><span class="stat-label">मौके बाकी</span><strong id="remaining">8</strong></div>
-      <div><span class="stat-label">सबसे अच्छा</span><strong id="best">—</strong></div>
+    <section class="scorebar" aria-label="स्कोर">
+      <div class="scorebox score-main"><span>स्कोर</span><strong id="score">0</strong></div>
+      <div class="scorebox"><span>रिकॉर्ड</span><strong id="best">0</strong></div>
+      <button class="icon-button" id="new-game" type="button" aria-label="नया गेम" title="नया गेम">↻</button>
     </section>
 
-    <section class="game-card">
-      <div class="card-heading">
-        <div><span class="level-pill">LEVEL 01</span><h2>गुप्त कोड खोजो</h2></div>
-        <span class="lock-icon" aria-hidden="true">⌁</span>
+    <section class="board-card">
+      <div class="board-heading">
+        <div><span class="level-label">CLASSIC MODE</span><h2>अपना अगला मूव चुनो</h2></div>
+        <div class="combo" id="combo">READY</div>
       </div>
-      <p class="rules">कोड में 3 अलग-अलग अंक हैं। 0 भी पहला अंक हो सकता है। नीचे दिए गए हर संकेत का अर्थ बिल्कुल सही है।</p>
-
-      <div class="clues" aria-label="कोड के संकेत">
-        <div class="clue"><span class="clue-code">2 7 3</span><p>ठीक <b>एक अंक</b> सही है और सही जगह पर है। बाकी दोनों अंक कोड में नहीं हैं।</p></div>
-        <div class="clue"><span class="clue-code">7 3 8</span><p>ठीक <b>एक अंक</b> सही है, लेकिन गलत जगह पर है।</p></div>
-        <div class="clue"><span class="clue-code">1 8 0</span><p>ठीक <b>दो अंक</b> सही हैं, लेकिन दोनों गलत जगह पर हैं।</p></div>
-        <div class="clue"><span class="clue-code">4 9 2</span><p>इनमें से <b>कोई भी अंक</b> कोड में नहीं है।</p></div>
-        <div class="clue"><span class="clue-code">7 6 1</span><p>ठीक <b>एक अंक</b> सही है, लेकिन गलत जगह पर है।</p></div>
-      </div>
-
-      <form id="guess-form" class="guess-area">
-        <label for="guess">अपना 3 अंकों का जवाब लिखें</label>
-        <div class="guess-row">
-          <input id="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="जैसे 123" aria-describedby="input-help">
-          <button id="submit-btn" type="submit">जाँचें <span aria-hidden="true">→</span></button>
-        </div>
-        <p id="input-help" class="input-help">तीनों अंक अलग-अलग होने चाहिए।</p>
-      </form>
-
-      <div id="message" class="message" role="status" aria-live="polite">ध्यान से संकेत पढ़ें और अपना पहला अनुमान लगाएँ।</div>
-      <div class="history-wrap">
-        <h3>आपके प्रयास <span id="attempt-count">0/8</span></h3>
-        <ol id="history" class="history"><li class="empty-history">अभी कोई प्रयास नहीं किया गया।</li></ol>
-      </div>
-      <div id="result-actions" class="result-actions" hidden>
-        <button id="retry-btn" class="secondary-btn" type="button">फिर से खेलें</button>
-      </div>
+      <div id="board" class="board" role="grid" aria-label="8 बाय 8 ब्लॉक बोर्ड"></div>
+      <p id="status" class="status" aria-live="polite">नीचे से एक ब्लॉक चुनें, फिर बोर्ड पर खाली जगह टैप करें।</p>
+      <div class="tray-heading"><span>तुम्हारे ब्लॉक्स</span><small>एक-एक करके इस्तेमाल करो</small></div>
+      <div id="tray" class="tray" aria-label="उपलब्ध ब्लॉक्स"></div>
+      <div class="help-row"><span>✦</span> पूरी row या column भरने पर वह साफ हो जाएगी।</div>
     </section>
 
-    <section class="skills">
-      <p class="eyebrow">इस गेम से पाँच कौशल मजबूत करें</p>
-      <div class="skill-grid">
-        <div><span>01</span><b>Logical Thinking</b><small>तार्किक सोच</small></div>
-        <div><span>02</span><b>Pattern Recognition</b><small>पैटर्न पहचानना</small></div>
-        <div><span>03</span><b>Deductive Reasoning</b><small>निष्कर्ष निकालना</small></div>
-        <div><span>04</span><b>Problem Solving</b><small>समस्या सुलझाना</small></div>
-        <div><span>05</span><b>Strategic Thinking</b><small>रणनीतिक सोच</small></div>
+    <section class="howto">
+      <h3>कैसे खेलें?</h3>
+      <div class="howto-grid">
+        <div><b>01</b><span>नीचे से कोई ब्लॉक चुनो</span></div>
+        <div><b>02</b><span>बोर्ड पर सही जगह टैप करो</span></div>
+        <div><b>03</b><span>लाइन साफ करके स्कोर बढ़ाओ</span></div>
       </div>
     </section>
-
-    <footer> MIND MASTER <span>•</span> हर संकेत एक सुराग है।</footer>
+    <footer>MIND MASTER <span>•</span> दिमाग लगाओ, रिकॉर्ड बनाओ</footer>
   </main>
+
+  <div class="modal-backdrop" id="game-over" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="over-title">
+      <div class="modal-star">✦</div>
+      <p class="eyebrow">PUZZLE COMPLETE</p>
+      <h2 id="over-title">गेम ओवर!</h2>
+      <p>अब कोई ब्लॉक फिट नहीं हो रहा। एक और कोशिश करें!</p>
+      <div class="final-score"><span>तुम्हारा स्कोर</span><strong id="final-score">0</strong></div>
+      <button id="play-again" type="button">फिर से खेलें <span>↗</span></button>
+    </section>
+  </div>
   <script src="app.js"></script>
   <script>
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
