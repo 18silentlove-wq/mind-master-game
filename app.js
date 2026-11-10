@@ -5,11 +5,11 @@ function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function makeQuestion(){
  let a,b,answer,op,q;
  if(level<=2){
-   a=rand(2,15);b=rand(2,12);op=Math.random()<.5?"+":"−";answer=op==="+"?a+b:a-b;
+   a=rand(2,15);b=rand(2,12);op=Math.random()<.5?"+":"−";if(op==="−"&&b>a)[a,b]=[b,a];answer=op==="+"?a+b:a-b;
  }else if(level<=4){
    a=rand(2,12);b=rand(2,10);op=Math.random()<.5?"×":"+";answer=op==="×"?a*b:a+b;
  }else if(level<=6){
-   if(Math.random()<.5){b=rand(2,12);answer=rand(2,12);a=b*answer;op="÷"}else{a=rand(10,60);b=rand(2,20);op="−";answer=a-b}
+   if(Math.random()<.5){b=rand(2,12);answer=rand(2,12);a=b*answer;op="÷"}else{b=rand(2,20);a=rand(b,60);op="−";answer=a-b}
  }else if(level<=8){
    a=rand(10,40);b=rand(2,12);const c=rand(2,15);op=Math.random()<.5?"×":"+";
    answer=op==="×"?a*b+c:a+b*c;q=op==="×"?a+" × "+b+" + "+c:a+" + "+b+" × "+c;
