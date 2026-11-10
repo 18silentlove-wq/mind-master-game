@@ -1,4 +1,4 @@
-const CACHE_NAME = "mind-master-maze-v4";
+const CACHE_NAME = "mind-master-neon-rush-v5";
 const FILES = ["./","./index.html","./styles.css","./app.js","./manifest.webmanifest"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});
