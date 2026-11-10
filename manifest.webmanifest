@@ -1,10 +1,10 @@
 {
-  "name": "MIND MASTER — Math Maze",
-  "short_name": "Math Maze",
-  "description": "Solve maths questions and escape the maze.",
+  "name": "NEON RUSH — MIND MASTER",
+  "short_name": "NEON RUSH",
+  "description": "Dodge, collect and beat your best score.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#10131b",
-  "theme_color": "#10131b",
-  "lang": "hi"
+  "background_color": "#080b14",
+  "theme_color": "#080b14",
+  "lang": "en"
 }
