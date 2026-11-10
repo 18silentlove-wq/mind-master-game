@@ -1,26 +1,31 @@
 (()=>{"use strict";
-const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
-const $=id=>document.getElementById(id);
-let W=0,H=0,dpr=1,raf=0,last=0,elapsed=0,score=0,best=Number(localStorage.getItem("neonRushBest")||0),speed=1,playerLane=1,objects=[],running=false,paused=false,over=false,spawn=0,flash=0;
-const lanes=3,colors={cyan:"#51e5ff",pink:"#ff4fd8",gold:"#ffe66d"};
-$("best").textContent=best;
-function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
-new ResizeObserver(resize).observe(canvas);
-function laneX(l){return W*(.2+l*.3)}
-function playerY(){return H*.79}
-function start(){cancelAnimationFrame(raf);score=0;elapsed=0;speed=1;spawn=.5;playerLane=1;objects=[];running=true;paused=false;over=false;$("score").textContent="0";$("speed").textContent="1.0×";$("startScreen").classList.add("hidden");$("overScreen").classList.add("hidden");$("pauseTag").classList.add("hidden");last=performance.now();raf=requestAnimationFrame(loop)}
-function move(n){if(!running||paused||over)return;playerLane=Math.max(0,Math.min(2,playerLane+n))}
-function addObject(){const lane=Math.floor(Math.random()*3);const gem=Math.random()<.28;objects.push({lane,y:-30,type:gem?"gem":"block",size:gem?10:15,passed:false})}
-function loop(t){if(!running||paused||over)return;const dt=Math.min((t-last)/1000,.04);last=t;elapsed+=dt;speed=Math.min(2.8,1+elapsed/45);spawn-=dt;if(spawn<=0){addObject();spawn=Math.max(.34,1.05/speed+Math.random()*.28)}objects.forEach(o=>o.y+=H*.53*speed*dt);objects=objects.filter(o=>o.y<H+40);for(const o of objects){if(!o.passed&&o.y>playerY()-12){o.passed=true;if(o.lane===playerLane){if(o.type==="block"){end();return}else{score+=10;flash=.15}}}}score+=dt*2;const shown=Math.floor(score);$("score").textContent=shown;$("speed").textContent=speed.toFixed(1)+"×";if(flash>0)flash-=dt;draw();raf=requestAnimationFrame(loop)}
-function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
-function draw(){if(!W||!H)return;ctx.clearRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0b1b2c");g.addColorStop(1,"#080b14");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-ctx.strokeStyle="#17334a";ctx.lineWidth=1;for(let i=0;i<4;i++){const x=W*(.05+i*.3);ctx.beginPath();ctx.moveTo(W/2,H*.12);ctx.lineTo(x,H);ctx.stroke()}for(let y=(elapsed*120)%55;y<H;y+=55){ctx.strokeStyle="#14283a";ctx.beginPath();ctx.moveTo(W*.05,y);ctx.lineTo(W*.95,y);ctx.stroke()}
-objects.forEach(o=>{const x=laneX(o.lane);if(o.type==="gem"){ctx.save();ctx.translate(x,o.y);ctx.rotate(Math.PI/4);ctx.shadowBlur=18;ctx.shadowColor=colors.cyan;ctx.fillStyle=colors.cyan;ctx.fillRect(-8,-8,16,16);ctx.restore()}else{ctx.shadowBlur=18;ctx.shadowColor=colors.pink;roundRect(x-16,o.y-16,32,32,7,"#44203f",colors.pink);ctx.shadowBlur=0;roundRect(x-10,o.y-10,20,20,4,"#ff4fd8")}})
-const px=laneX(playerLane),py=playerY();ctx.save();ctx.shadowBlur=24;ctx.shadowColor=colors.cyan;ctx.fillStyle=flash>0?"#fff":colors.cyan;ctx.beginPath();ctx.moveTo(px,py-20);ctx.lineTo(px+16,py+13);ctx.lineTo(px,py+7);ctx.lineTo(px-16,py+13);ctx.closePath();ctx.fill();ctx.restore();ctx.fillStyle="#6c819b";ctx.font="9px system-ui";ctx.textAlign="center";ctx.fillText("DODGE  •  COLLECT  •  SURVIVE",W/2,H-14)}
-function end(){running=false;over=true;cancelAnimationFrame(raf);const final=Math.floor(score);if(final>best){best=final;localStorage.setItem("neonRushBest",best);$("best").textContent=best}$("finalScore").textContent=final;$("overScreen").classList.remove("hidden")}
-function togglePause(){if(!running||over)return;paused=!paused;$("pauseTag").classList.toggle("hidden",!paused);$("pause").textContent=paused?"▶":"Ⅱ";if(!paused){last=performance.now();raf=requestAnimationFrame(loop)}else cancelAnimationFrame(raf)}
-$("play").addEventListener("click",start);$("again").addEventListener("click",start);$("left").addEventListener("click",()=>move(-1));$("right").addEventListener("click",()=>move(1));$("pause").addEventListener("click",togglePause);
-window.addEventListener("keydown",e=>{if(["ArrowLeft","a","A"].includes(e.key)){e.preventDefault();move(-1)}if(["ArrowRight","d","D"].includes(e.key)){e.preventDefault();move(1)}if(e.key===" "){e.preventDefault();togglePause()}});
-let touchX=null;canvas.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].clientX},{passive:true});canvas.addEventListener("touchend",e=>{if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>18)move(dx>0?1:-1);touchX=null},{passive:true});
-resize();draw();
+const $=id=>document.getElementById(id),N=7;
+const levels=[
+{name:"THE FIRST REFLECTION",mission:"A simple signal path. Learn how each mirror bends the beam.",points:[[3,0],[3,2],[1,2],[1,4],[5,4],[5,6],[3,6]]},
+{name:"CROSS CURRENT",mission:"The route doubles back. Watch the direction before every turn.",points:[[3,0],[1,0],[1,3],[5,3],[5,1],[6,1],[6,6],[3,6]]},
+{name:"THE LONG DETOUR",mission:"A longer route with more reflections. Every crystal matters.",points:[[3,0],[3,1],[5,1],[5,5],[1,5],[1,3],[3,3],[3,6]]},
+{name:"GOLDEN CIRCUIT",mission:"Read the whole route. A mirror can send the beam away from the board.",points:[[3,0],[0,0],[0,2],[4,2],[4,6],[1,6],[1,4],[3,4],[3,6]]},
+{name:"SPLIT DECISION",mission:"The path is tighter now. Plan the sequence instead of guessing.",points:[[3,0],[5,0],[5,2],[2,2],[2,5],[6,5],[6,1],[3,1],[3,6]]},
+{name:"THE INNER LOOP",mission:"A winding signal path. Count your turns and keep the beam in view.",points:[[3,0],[1,0],[1,1],[5,1],[5,4],[2,4],[2,6],[6,6],[6,3],[3,3],[3,6]]},
+{name:"NIGHT SHIFT",mission:"The final sectors demand a clean chain of reflections.",points:[[3,0],[0,0],[0,3],[4,3],[4,1],[6,1],[6,5],[2,5],[2,6],[3,6]]},
+{name:"PRISM MASTER",mission:"One last signal. Solve the full route with as few rotations as you can.",points:[[3,0],[3,2],[0,2],[0,5],[5,5],[5,3],[1,3],[1,1],[6,1],[6,6],[3,6]]}
+];
+let level=0,moves=0,hints=2,mirrors=[],crystals=[],beam=[],hit=false,solved=false;
+const board=$("board");
+function key(r,c){return r+","+c}
+function direction(a,b){return [Math.sign(b[0]-a[0]),Math.sign(b[1]-a[1])]}
+function slashOut(d,slash){const [dr,dc]=d;return slash?[-dc,-dr]:[dc,dr]}
+function neededSlash(inDir,outDir){return JSON.stringify(slashOut(inDir,true))===JSON.stringify(outDir)}
+function makePath(points){const path=[];for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],d=direction(a,b);let r=a[0],c=a[1];if(!path.length)path.push([r,c]);while(r!==b[0]||c!==b[1]){r+=d[0];c+=d[1];path.push([r,c])}}return path}
+function setup(){const spec=levels[level],path=makePath(spec.points),turns=[];for(let i=1;i<path.length-1;i++){const before=direction(path[i-1],path[i]),after=direction(path[i],path[i+1]);if(before[0]!==after[0]||before[1]!==after[1])turns.push({r:path[i][0],c:path[i][1],correct:neededSlash(before,after)})}
+mirrors=turns.map((m,i)=>({...m,slash:!m.correct,id:i}));const mirrorSet=new Set(mirrors.map(m=>key(m.r,m.c)));crystals=path.filter((p,i)=>i>1&&i<path.length-2&&!mirrorSet.has(key(...p))&&i%3===1).map(p=>({r:p[0],c:p[1]}));if(!crystals.length){const p=path[Math.floor(path.length/2)];if(!mirrorSet.has(key(...p)))crystals.push({r:p[0],c:p[1]})}
+moves=0;hints=2;solved=false;$("level").textContent=String(level+1).padStart(2,"0")+" / 08";$("sectorName").textContent=spec.name;$("missionText").textContent=spec.mission;$("missionTitle").textContent="Mission "+String(level+1).padStart(2,"0");$("moves").textContent="0";$("hints").textContent=hints;draw()}
+function trace(){let r=3,c=-1,dr=0,dc=1,seen=new Set(),cells=[],crystalHits=new Set(),receiver=false;for(let step=0;step<100;step++){r+=dr;c+=dc;if(r<0||r>=N||c<0||c>=N)break;const k=key(r,c);if(seen.has(k))break;seen.add(k);cells.push(k);if(crystals.some(x=>key(x.r,x.c)===k))crystalHits.add(k);const m=mirrors.find(x=>x.r===r&&x.c===c);if(m){[dr,dc]=slashOut([dr,dc],m.slash)}if(r===3&&c===6){receiver=true;break}}return {cells,crystalHits,receiver}}
+function draw(){const t=trace();beam=t.cells;hit=t.receiver&&t.crystalHits.size===crystals.length;board.replaceChildren();for(let r=0;r<N;r++)for(let c=0;c<N;c++){const k=key(r,c),m=mirrors.find(x=>x.r===r&&x.c===c),cr=crystals.some(x=>x.r===r&&x.c===c),isBeam=t.cells.includes(k),el=document.createElement("button");el.type="button";el.className="cell "+(m?"mirror":cr?"crystal":(r===3&&c===0)?"source":(r===3&&c===6)?"receiver":isBeam?"path":"empty");el.setAttribute("role","gridcell");if(isBeam)el.classList.add("beam");if(cr&&t.crystalHits.has(k))el.classList.add("lit-crystal");if(r===3&&c===6&&t.receiver)el.classList.add("hit");if(m){el.innerHTML='<span class="symbol">'+(m.slash?"/":"\\")+'</span>';el.setAttribute("aria-label","Rotate mirror");el.addEventListener("click",()=>rotate(m.id))}else if(r===3&&c===0){el.textContent="●";el.setAttribute("aria-label","Signal source")}else if(r===3&&c===6){el.textContent="◎";el.setAttribute("aria-label","Receiver")}else if(cr){el.textContent="✦";el.setAttribute("aria-label","Energy crystal")}else if(isBeam){el.textContent=""}board.append(el)}
+$("crystals").textContent=t.crystalHits.size+" / "+crystals.length;$("feedback").className="feedback";if(hit){$("feedback").textContent="Perfect connection! All crystals charged. Sector cleared."; $("feedback").classList.add("good");if(!solved){solved=true;$("next").hidden=false;$("completeText").textContent="You routed the signal in "+moves+" mirror rotations and charged every crystal.";$("complete").hidden=false}}else if(t.receiver){$("feedback").textContent="Receiver reached, but a crystal is still dark. Adjust the beam."; $("feedback").classList.add("bad")}else if(t.cells.length>1){$("feedback").textContent="Signal is travelling. Find the next reflection."}else{$("feedback").textContent="Tap a mirror to rotate it. The beam updates instantly."}$("hint").disabled=hints===0||solved}
+function rotate(id){if(solved)return;const m=mirrors.find(x=>x.id===id);m.slash=!m.slash;moves++;$("moves").textContent=moves;draw()}
+function reset(){setup()}
+function hint(){if(hints<=0||solved)return;const m=mirrors.find(x=>x.slash!==x.correct);if(!m){draw();return}m.slash=m.correct;hints--;$("hints").textContent=hints;moves++;$("moves").textContent=moves;draw();$("feedback").textContent="One mirror aligned. Keep solving the route."}
+function next(){if(!solved)return;$("complete").hidden=true;if(level<levels.length-1)level++;else level=0;setup()}
+$("reset").addEventListener("click",reset);$("hint").addEventListener("click",hint);$("next").addEventListener("click",next);$("continue").addEventListener("click",next);setup();
 })();
