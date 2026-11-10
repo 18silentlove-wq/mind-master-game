@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="MIND MASTER — logic, pattern recognition and deduction puzzle game.">
+  <title>MIND MASTER — दिमागी चुनौती</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Mind Master home"><span class="brand-mark">M</span><span>MIND <b>MASTER</b></span></a>
+      <span class="offline-tag"><i></i> ऑफलाइन गेम</span>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">दिमाग को चुनौती दो</p>
+      <h1>सोचो। समझो। <span>कोड तोड़ो।</span></h1>
+      <p class="intro">तीन अंकों का गुप्त कोड खोजो। हर संकेत ध्यान से पढ़ो और अपनी तर्कशक्ति का इस्तेमाल करो।</p>
+    </section>
+
+    <section class="stats" aria-label="खेल की जानकारी">
+      <div><span class="stat-label">लेवल</span><strong>01 <small>/ 10</small></strong></div>
+      <div><span class="stat-label">मौके बाकी</span><strong id="remaining">8</strong></div>
+      <div><span class="stat-label">सबसे अच्छा</span><strong id="best">—</strong></div>
+    </section>
+
+    <section class="game-card">
+      <div class="card-heading">
+        <div><span class="level-pill">LEVEL 01</span><h2>गुप्त कोड खोजो</h2></div>
+        <span class="lock-icon" aria-hidden="true">⌁</span>
+      </div>
+      <p class="rules">कोड में 3 अलग-अलग अंक हैं। 0 भी पहला अंक हो सकता है। नीचे दिए गए हर संकेत का अर्थ बिल्कुल सही है।</p>
+
+      <div class="clues" aria-label="कोड के संकेत">
+        <div class="clue"><span class="clue-code">2 7 3</span><p>ठीक <b>एक अंक</b> सही है और सही जगह पर है। बाकी दोनों अंक कोड में नहीं हैं।</p></div>
+        <div class="clue"><span class="clue-code">7 3 8</span><p>ठीक <b>एक अंक</b> सही है, लेकिन गलत जगह पर है।</p></div>
+        <div class="clue"><span class="clue-code">1 8 0</span><p>ठीक <b>दो अंक</b> सही हैं, लेकिन दोनों गलत जगह पर हैं।</p></div>
+        <div class="clue"><span class="clue-code">4 9 2</span><p>इनमें से <b>कोई भी अंक</b> कोड में नहीं है।</p></div>
+        <div class="clue"><span class="clue-code">7 6 1</span><p>ठीक <b>एक अंक</b> सही है, लेकिन गलत जगह पर है।</p></div>
+      </div>
+
+      <form id="guess-form" class="guess-area">
+        <label for="guess">अपना 3 अंकों का जवाब लिखें</label>
+        <div class="guess-row">
+          <input id="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="जैसे 123" aria-describedby="input-help">
+          <button id="submit-btn" type="submit">जाँचें <span aria-hidden="true">→</span></button>
+        </div>
+        <p id="input-help" class="input-help">तीनों अंक अलग-अलग होने चाहिए।</p>
+      </form>
+
+      <div id="message" class="message" role="status" aria-live="polite">ध्यान से संकेत पढ़ें और अपना पहला अनुमान लगाएँ।</div>
+      <div class="history-wrap">
+        <h3>आपके प्रयास <span id="attempt-count">0/8</span></h3>
+        <ol id="history" class="history"><li class="empty-history">अभी कोई प्रयास नहीं किया गया।</li></ol>
+      </div>
+      <div id="result-actions" class="result-actions" hidden>
+        <button id="retry-btn" class="secondary-btn" type="button">फिर से खेलें</button>
+      </div>
+    </section>
+
+    <section class="skills">
+      <p class="eyebrow">इस गेम से पाँच कौशल मजबूत करें</p>
+      <div class="skill-grid">
+        <div><span>01</span><b>Logical Thinking</b><small>तार्किक सोच</small></div>
+        <div><span>02</span><b>Pattern Recognition</b><small>पैटर्न पहचानना</small></div>
+        <div><span>03</span><b>Deductive Reasoning</b><small>निष्कर्ष निकालना</small></div>
+        <div><span>04</span><b>Problem Solving</b><small>समस्या सुलझाना</small></div>
+        <div><span>05</span><b>Strategic Thinking</b><small>रणनीतिक सोच</small></div>
+      </div>
+    </section>
+
+    <footer> MIND MASTER <span>•</span> हर संकेत एक सुराग है।</footer>
+  </main>
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+    }
+  </script>
+</body>
+</html>
