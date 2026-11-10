@@ -7,7 +7,7 @@
   <meta name="description" content="MIND MASTER — Block Blast style block puzzle game.">
   <title>MIND MASTER — Block Puzzle</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <main class="app">
@@ -61,10 +61,11 @@
       <button id="play-again" type="button">फिर से खेलें <span>↗</span></button>
     </section>
   </div>
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
   <script>
-    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+    // Old offline cache can serve an outdated game build. Disable it while the game is being tested.
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => registrations.forEach(registration => registration.unregister()));
     }
   </script>
 </body>
