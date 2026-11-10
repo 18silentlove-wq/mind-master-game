@@ -1,0 +1,10 @@
+{
+  "name": "MIND MASTER",
+  "short_name": "Mind Master",
+  "description": "Logic and code-breaking puzzle game",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#111827",
+  "lang": "hi"
+}
