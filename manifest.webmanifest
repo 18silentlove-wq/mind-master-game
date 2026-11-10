@@ -1,10 +1,10 @@
 {
-  "name": "MIND MASTER",
-  "short_name": "Mind Master",
-  "description": "Logic and code-breaking puzzle game",
+  "name": "MIND MASTER — Math Maze",
+  "short_name": "Math Maze",
+  "description": "Solve maths questions and escape the maze.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#0b1020",
-  "theme_color": "#111827",
+  "background_color": "#10131b",
+  "theme_color": "#10131b",
   "lang": "hi"
 }
