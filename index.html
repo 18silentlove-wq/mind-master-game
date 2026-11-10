@@ -1,25 +1,24 @@
 <!doctype html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#10131b"><meta name="description" content="MIND MASTER Math Maze — solve maths questions and escape the maze.">
-<title>MIND MASTER — Math Maze</title><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css?v=4">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#080b14"><meta name="description" content="NEON RUSH — dodge, collect and beat your best score.">
+<title>NEON RUSH — MIND MASTER</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
-<main class="app">
-<header class="topbar"><a class="brand" href="./"><span class="brand-icon">✦</span><span>MIND<span class="brand-accent">MASTER</span></span></a><span class="tag"><i></i> MATH MAZE</span></header>
-<section class="intro"><p class="eyebrow">THINK • SOLVE • ESCAPE</p><h1>दिमाग लगाओ,<br><span>रास्ता बनाओ!</span></h1><p>भूलभुलैया से बाहर निकलने के लिए गणित के सवाल हल करो।</p></section>
-<section class="stats"><div><small>लेवल</small><strong id="level">1</strong></div><div><small>स्कोर</small><strong id="score">0</strong></div><div><small>चालें</small><strong id="moves">0</strong></div><button id="restart" aria-label="फिर से शुरू करें" title="फिर से शुरू करें">↻</button></section>
-<section class="game-card"><div class="maze-head"><div><small>तुम्हारा मिशन</small><h2>Exit तक पहुँचो <span>🚪</span></h2></div><span class="key-label">🔒 गणित का ताला</span></div>
-<div id="maze" class="maze" role="grid" aria-label="भूलभुलैया"></div>
-<div class="legend"><span>🧍 तुम</span><span>🔒 सवाल वाला दरवाज़ा</span><span>🏁 Exit</span></div>
-<div class="question" id="question" aria-live="polite"><p class="q-label">MATH CHALLENGE</p><h3 id="question-text">तैयार हो?</h3><div id="answers" class="answers"></div><p id="feedback" class="feedback">दरवाज़े तक पहुँचो और सवाल हल करो।</p></div>
-<div class="controls"><button class="move up" data-move="up" aria-label="ऊपर">▲</button><div class="middle"><button class="move" data-move="left" aria-label="बाएँ">◀</button><button class="move" data-move="down" aria-label="नीचे">▼</button><button class="move" data-move="right" aria-label="दाएँ">▶</button></div><small>कीबोर्ड के Arrow keys भी इस्तेमाल कर सकते हो</small></div>
+<main class="shell">
+<header class="top"><a class="brand" href="./"><span class="mark">M</span><span>MIND MASTER</span></a><span class="game-name">NEON RUSH</span></header>
+<section class="hud" aria-label="Game statistics"><div><small>SCORE</small><strong id="score">0</strong></div><div><small>BEST</small><strong id="best">0</strong></div><div><small>SPEED</small><strong id="speed">1.0×</strong></div></section>
+<section class="stage-wrap">
+<canvas id="game" aria-label="Neon Rush game area"></canvas>
+<div class="screen" id="startScreen"><div class="orb">◆</div><p class="eyebrow">READY WHEN YOU ARE</p><h1>NEON RUSH</h1><p class="sub">Dodge the blocks. Collect the energy.</p><button id="play">PLAY NOW</button><small>← → / A D or tap the sides</small></div>
+<div class="screen hidden" id="overScreen"><p class="eyebrow">RUN COMPLETE</p><h2>GOOD RUN.</h2><p class="result">SCORE <strong id="finalScore">0</strong></p><button id="again">PLAY AGAIN</button><small>Beat your best score.</small></div>
+<div class="pause-tag hidden" id="pauseTag">PAUSED</div>
 </section>
-<section class="tips"><h3>कैसे खेलें?</h3><p><b>1.</b> तीर वाले बटन से रास्ते पर चलो। <b>2.</b> 🔒 दरवाज़े पर पहुँचकर सवाल का सही जवाब दो। <b>3.</b> Exit तक पहुँचकर अगला लेवल खोलो!</p></section>
-<footer>MIND MASTER <span>•</span> हर सवाल एक नई चाबी है</footer>
+<nav class="controls" aria-label="Movement controls"><button id="left" aria-label="Move left">←</button><button id="pause" aria-label="Pause game">Ⅱ</button><button id="right" aria-label="Move right">→</button></nav>
+<p class="hint">MOVE LEFT OR RIGHT TO DODGE · COLLECT THE GLOWING GEMS</p>
 </main>
-<div class="overlay" id="win" hidden><section class="popup"><div class="trophy">🏆</div><p class="eyebrow">LEVEL COMPLETE</p><h2>शाबाश! रास्ता मिल गया।</h2><p id="win-text">तुमने लेवल पूरा कर लिया।</p><button id="next">अगला लेवल खेलें →</button></section></div>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>if("serviceWorker" in navigator && location.protocol.startsWith("http")) addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));</script>
 </body></html>
